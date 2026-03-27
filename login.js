@@ -23,6 +23,9 @@ if (response.ok) {
       
       // Save the user ID to local storage
       localStorage.setItem("loggedInUser", data.userId); 
+
+
+      
       
       // Look at the isAdmin value we just sent from the server
       if (Number(data.isAdmin) === 1) {
