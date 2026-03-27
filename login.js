@@ -64,7 +64,7 @@ async function loginUser(event) {
       localStorage.setItem("loggedInUser", data.userId); 
       
       // Redirect to the main dashboard!
-      window.location.href = "index.html"; 
+      window.location.href = "index2.html"; 
     } else {
       const errorData = await response.json();
       message.textContent = errorData.message || "Invalid credentials.";

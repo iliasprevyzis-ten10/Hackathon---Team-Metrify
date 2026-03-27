@@ -6,6 +6,11 @@
     <title>Career Skill Tracker</title>
    <link rel="stylesheet" href="style2.css">
    <script src="script.js" defer></script>
+   <script>
+  if (!localStorage.getItem("loggedInUser")) {
+      window.location.href = "login.html";
+  }
+</script>
 </head>
 <body>
 
