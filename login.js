@@ -1,84 +1,78 @@
-const express = require('express');
-const cors = require('cors');
-const Database = require('better-sqlite3');
-const path = require('path');
+// --- REGISTER FUNCTION ---
+async function registerUser(event) {
+  if (event) event.preventDefault(); // Prevents the page from refreshing
 
-const app = express();
-const PORT = 3000;
+  // 1. Grab the values from the HTML inputs
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const message = document.getElementById("message");
 
-// 1. MIDDLEWARE
-app.use(cors());
-app.use(express.json());
-// Serves your HTML, CSS, and JS files from the root folder
-app.use(express.static(__dirname));
+  // 2. Check if they are empty
+  if (!email || !password) {
+    message.textContent = "Please enter both an email and a password.";
+    return;
+  }
 
-// 2. DATABASE CONNECTION
-// Points to the file in your 'db' folder as seen in your structure
-const db = new Database('./db/matrifyDB', { verbose: console.log });
+  try {
+    // 3. Send the data to your backend server
+    const response = await fetch('http://localhost:3000/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password }) 
+    });
 
-// 3. FRONTEND ROUTES
-// Sends the login page when you visit http://localhost:3000
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
-});
-
-// 4. API ROUTES
-
-// --- Register User ---
-app.post('/api/register', (req, res) => {
-    const { userId, password } = req.body;
-
-    try {
-        // Matches the columns in your SQLite screenshot
-        const sql = `
-            INSERT INTO Users (userId, passwordHash, userFirstName, userSurname, email, isAdmin) 
-            VALUES (?, ?, ?, ?, ?, ?)
-        `;
-        const statement = db.prepare(sql);
-        
-        // Inserting the password into 'passwordHash' 
-        // and using empty strings for the required name/email fields for now
-        statement.run(userId, password, '', '', '', 0);
-
-        res.status(201).json({ message: "User created successfully!" });
-    } catch (err) {
-        if (err.code === 'SQLITE_CONSTRAINT') {
-            res.status(400).json({ message: "User ID already exists." });
-        } else {
-            console.error("Registration Error:", err);
-            res.status(500).json({ message: "Database error occurred." });
-        }
+    // 4. Handle the server's response
+    if (response.ok) {
+      message.textContent = "Account created successfully! You can now log in.";
+      message.style.color = "green"; // Optional: make success message green
+    } else {
+      const errorData = await response.json();
+      message.textContent = errorData.message || "Registration failed.";
+      message.style.color = "red";
     }
-});
+  } catch (error) {
+    console.error("Registration error:", error);
+    message.textContent = "Network error. Is your backend server running?";
+    message.style.color = "red";
+  }
+}
 
-// --- Login User ---
-app.post('/api/login', (req, res) => {
-    const { userId, password } = req.body;
+// --- LOGIN FUNCTION ---
+async function loginUser(event) {
+  if (event) event.preventDefault(); 
 
-    try {
-        const user = db.prepare('SELECT * FROM Users WHERE userId = ?').get(userId);
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const message = document.getElementById("message");
 
-        if (!user || user.passwordHash !== password) {
-            return res.status(401).json({ message: "Invalid ID or password." });
-        }
+  if (!email || !password) {
+    message.textContent = "Please enter both an email and a password.";
+    return;
+  }
 
-        // Success - send back the userId so the frontend can store it
-        res.json({ 
-            message: "Login successful", 
-            userId: user.userId,
-            roleId: user.roleId 
-        });
-    } catch (err) {
-        console.error("Login Error:", err);
-        res.status(500).json({ message: "Internal server error." });
+  try {
+    const response = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      
+      // Store the user ID so the rest of your app knows who is logged in
+      localStorage.setItem("loggedInUser", data.userId); 
+      
+      // Redirect to the main dashboard!
+      window.location.href = "index.html"; 
+    } else {
+      const errorData = await response.json();
+      message.textContent = errorData.message || "Invalid credentials.";
+      message.style.color = "red";
     }
-});
-
-// 5. SERVER START
-app.listen(PORT, () => {
-    console.log(`
-    ✅ Backend is running!
-    🌍 View your app at: http://localhost:${PORT}
-    📂 Database connected to: ./db/matrifyDB
-    `);
-});
+  } catch (error) {
+    console.error("Login error:", error);
+    message.textContent = "Network error. Could not connect to the server.";
+    message.style.color = "red";
+  }
+}
