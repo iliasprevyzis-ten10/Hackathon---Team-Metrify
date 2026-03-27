@@ -4,6 +4,7 @@
                 { id: "do1", name: "Linux Administration", time: "2-3 Weeks", how: "Practice basic terminal commands, file permissions, and bash scripting.", video: "https://www.youtube.com/watch?v=sWbUDq4S6Y8" },
                 { id: "do2", name: "Docker & Containerization", time: "3 Weeks", how: "Learn how to build Dockerfiles, manage images, and run multi-container apps with Docker Compose.", video: "https://www.youtube.com/watch?v=fqMOXICWOEM" },
                 { id: "do3", name: "CI/CD Pipelines (GitHub Actions/Jenkins)", time: "4 Weeks", how: "Set up automated testing and deployment workflows for basic web applications.", video: "https://www.youtube.com/watch?v=R8_veQiYBjI" }
+                { id: "do4", name: "Cloud Certifications", time: "8 Weeks", how: "Try to get the AWS or Azure Certifications to learn how the cloud works", video: "https://www.youtube.com/watch?v=NhDYbskXRgc" }
             ],
             "Scrum Master": [
                 { id: "sm1", name: "Agile Frameworks", time: "2 Weeks", how: "Understand the Agile manifesto, Scrum events (Daily, Sprint Review, Retrospective), and artifacts.", video: "https://www.youtube.com/watch?v=9TycLR0TqFA" },
