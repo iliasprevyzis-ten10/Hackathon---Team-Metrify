@@ -126,10 +126,10 @@
                     const card = document.createElement('div');
                     card.className = 'missing-skill-card';
                     card.innerHTML = `
-                        <h4>🎯 ${skill.name}</h4>
+                        <h4>${skill.name}</h4>
                         <p><strong>How to improve:</strong> ${skill.how}</p>
                         <p><strong>Estimated Time:</strong> ${skill.time}</p>
-                        <p>📺 <a href="${skill.video}" target="_blank" rel="noopener noreferrer">Watch Free Online Tutorial</a></p>
+                        <p><a href="${skill.video}" target="_blank" rel="noopener noreferrer">Watch Free Online Tutorial</a></p>
                     `;
                     actionPlanList.appendChild(card);
                 }
