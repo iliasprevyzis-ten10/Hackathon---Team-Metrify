@@ -83,7 +83,7 @@ app.post('/api/login', async (req, res) => {
         res.json({ 
             message: "Login successful", 
             userId: user.userId,
-            roleId: user.roleId 
+            isAdmin: user.isAdmin  
         });
     } catch (err) {
         console.error("❌ Login Error:", err);
