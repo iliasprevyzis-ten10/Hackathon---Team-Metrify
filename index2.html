@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Skill Tracker</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f9fafb;
+            --text: #1f2937;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1, h2, h3 {
+            color: var(--text);
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Career Selection Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Skills Form */
+        .skill-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .skill-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .skill-item input[type="checkbox"] {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .skill-label {
+            font-size: 1.1rem;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        /* Action Plan Section */
+        #action-plan-container {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px dashed var(--border);
+        }
+
+        .missing-skill-card {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .missing-skill-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: #b45309;
+        }
+
+        .missing-skill-card p {
+            margin: 0.25rem 0;
+            font-size: 0.95rem;
+        }
+
+        .missing-skill-card a {
+            color: var(--primary);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .missing-skill-card a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="selection-screen">
+            <h1>Choose Your Career Path</h1>
+            <p style="text-align: center;">Select a role to view the required skills and generate your learning path.</p>
+            <div class="grid" id="career-buttons">
+                </div>
+        </div>
+
+        <div id="dashboard-screen" class="hidden">
+            <button class="btn btn-outline" id="btn-change-career">← Change Career Path</button>
+            <h2 id="career-title">Career Title</h2>
+            <p>Mark the skills you already possess. The ones left unchecked will populate your learning action plan below.</p>
+            
+            <div id="skills-form">
+                </div>
+
+            <div id="action-plan-container">
+                <h3>Your Learning Action Plan</h3>
+                <div id="action-plan-list">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database of careers and their specific skills
+        const careerData = {
+            "DevOps": [
+                { id: "do1", name: "Linux Administration", time: "2-3 Weeks", how: "Practice basic terminal commands, file permissions, and bash scripting.", video: "https://www.youtube.com/watch?v=sWbUDq4S6Y8" },
+                { id: "do2", name: "Docker & Containerization", time: "3 Weeks", how: "Learn how to build Dockerfiles, manage images, and run multi-container apps with Docker Compose.", video: "https://www.youtube.com/watch?v=fqMOXICWOEM" },
+                { id: "do3", name: "CI/CD Pipelines (GitHub Actions/Jenkins)", time: "4 Weeks", how: "Set up automated testing and deployment workflows for basic web applications.", video: "https://www.youtube.com/watch?v=R8_veQiYBjI" }
+            ],
+            "Scrum Master": [
+                { id: "sm1", name: "Agile Frameworks", time: "2 Weeks", how: "Understand the Agile manifesto, Scrum events (Daily, Sprint Review, Retrospective), and artifacts.", video: "https://www.youtube.com/watch?v=9TycLR0TqFA" },
+                { id: "sm2", name: "Jira / Sprint Management", time: "1 Week", how: "Learn to create boards, manage backlogs, write user stories, and track velocity.", video: "https://www.youtube.com/watch?v=R9Kk8gN21hc" },
+                { id: "sm3", name: "Facilitation & Conflict Resolution", time: "Ongoing", how: "Study techniques for running effective meetings and handling team disagreements objectively.", video: "https://www.youtube.com/watch?v=QjeXqYpT1UA" }
+            ],
+            "Data Engineer": [
+                { id: "de1", name: "Python for Data", time: "4 Weeks", how: "Master Python basics, Pandas, and data manipulation techniques.", video: "https://www.youtube.com/watch?v=rfscVS0vtbw" },
+                { id: "de2", name: "Advanced SQL", time: "3 Weeks", how: "Learn window functions, CTEs, complex joins, and query optimization.", video: "https://www.youtube.com/watch?v=HXV3zeQKqGY" },
+                { id: "de3", name: "ETL Pipelines (Spark/Airflow)", time: "5 Weeks", how: "Understand how to extract, transform, and load big data using modern data orchestration tools.", video: "https://www.youtube.com/watch?v=H72R0n9y1bM" }
+            ],
+            "Front-end Developer": [
+                { id: "fe1", name: "Semantic HTML & Advanced CSS", time: "3 Weeks", how: "Learn Flexbox, CSS Grid, responsive design, and accessibility standards.", video: "https://www.youtube.com/watch?v=G3e-cpL7ofc" },
+                { id: "fe2", name: "JavaScript (ES6+)", time: "4 Weeks", how: "Master DOM manipulation, promises, async/await, and array methods.", video: "https://www.youtube.com/watch?v=W6NZfCO5SIk" },
+                { id: "fe3", name: "React.js", time: "5 Weeks", how: "Understand components, state management, hooks, and routing.", video: "https://www.youtube.com/watch?v=bMknfKXIFA8" }
+            ],
+            "Back-end Developer": [
+                { id: "be1", name: "Node.js & Express", time: "4 Weeks", how: "Learn to build servers, handle routing, and implement middleware.", video: "https://www.youtube.com/watch?v=Oe421EPjeBE" },
+                { id: "be2", name: "RESTful APIs", time: "2 Weeks", how: "Understand HTTP methods, status codes, and JSON formatting.", video: "https://www.youtube.com/watch?v=-MTSQjw5DrM" },
+                { id: "be3", name: "Database Design (PostgreSQL/MongoDB)", time: "4 Weeks", how: "Learn how to design schemas, normalize data, and write CRUD operations.", video: "https://www.youtube.com/watch?v=ztHopE5Wnpc" }
+            ],
+            "Full-Stack Developer": [
+                { id: "fs1", name: "Frontend Basics (HTML/CSS/JS)", time: "5 Weeks", how: "Build static and interactive websites using core web technologies.", video: "https://www.youtube.com/watch?v=mU6anWqZJcc" },
+                { id: "fs2", name: "Backend APIs & Databases", time: "6 Weeks", how: "Create server-side logic and connect your application to a database.", video: "https://www.youtube.com/watch?v=zZ6vybT1HQs" },
+                { id: "fs3", name: "Version Control (Git)", time: "1 Week", how: "Learn to commit, branch, merge, and resolve conflicts using Git and GitHub.", video: "https://www.youtube.com/watch?v=RGOj5yH7evk" }
+            ]
+        };
+
+        // DOM Elements
+        const selectionScreen = document.getElementById('selection-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        const careerButtonsContainer = document.getElementById('career-buttons');
+        const careerTitle = document.getElementById('career-title');
+        const skillsForm = document.getElementById('skills-form');
+        const actionPlanList = document.getElementById('action-plan-list');
+        const btnChangeCareer = document.getElementById('btn-change-career');
+
+        let currentCareer = null;
+
+        // Initialize Career Buttons
+        function init() {
+            Object.keys(careerData).forEach(career => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.textContent = career;
+                btn.onclick = () => selectCareer(career);
+                careerButtonsContainer.appendChild(btn);
+            });
+        }
+
+        // Handle Career Selection
+        function selectCareer(career) {
+            currentCareer = career;
+            selectionScreen.classList.add('hidden');
+            dashboardScreen.classList.remove('hidden');
+            careerTitle.textContent = `${career} Skills Checklist`;
+            renderSkills();
+            updateActionPlan(); // Run once initially
+        }
+
+        // Handle Changing Career
+        btnChangeCareer.onclick = () => {
+            currentCareer = null;
+            dashboardScreen.classList.add('hidden');
+            selectionScreen.classList.remove('hidden');
+        };
+
+        // Render Checkboxes
+        function renderSkills() {
+            skillsForm.innerHTML = ''; // Clear previous
+            const skills = careerData[currentCareer];
+
+            skills.forEach(skill => {
+                const div = document.createElement('div');
+                div.className = 'skill-item';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = skill.id;
+                checkbox.onchange = updateActionPlan;
+
+                const label = document.createElement('label');
+                label.htmlFor = skill.id;
+                label.className = 'skill-label';
+                label.textContent = skill.name;
+
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                skillsForm.appendChild(div);
+            });
+        }
+
+        // Update the Action Plan based on UNCHECKED boxes
+        function updateActionPlan() {
+            actionPlanList.innerHTML = '';
+            const skills = careerData[currentCareer];
+            let allCompleted = true;
+
+            skills.forEach(skill => {
+                const checkbox = document.getElementById(skill.id);
+                if (!checkbox.checked) {
+                    allCompleted = false;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'missing-skill-card';
+                    card.innerHTML = `
+                        <h4>🎯 ${skill.name}</h4>
+                        <p><strong>How to improve:</strong> ${skill.how}</p>
+                        <p><strong>Estimated Time:</strong> ${skill.time}</p>
+                        <p>📺 <a href="${skill.video}" target="_blank" rel="noopener noreferrer">Watch Free Online Tutorial</a></p>
+                    `;
+                    actionPlanList.appendChild(card);
+                }
+            });
+
+            if (allCompleted) {
+                actionPlanList.innerHTML = `<div class="missing-skill-card" style="border-left-color: #10b981; background-color: #ecfdf5;">
+                    <h4 style="color: #047857;">🎉 Congratulations!</h4>
+                    <p>You have marked all core skills as complete for this role. You are ready to start applying for jobs or moving to advanced topics!</p>
+                </div>`;
+            }
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
