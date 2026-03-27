@@ -315,3 +315,81 @@ input {
   font-weight: bold;
   color: var(--primary);
 }
+
+/* registration page */
+/* Centers the card on the page */
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f5f7; /* Soft light gray background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* The White Card Container */
+.registration-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Soft drop shadow */
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Fixes the Title Location */
+.form-title {
+  text-align: center;
+  color: #1a1a1a;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+/* Groups the label and input together */
+.input-group {
+  display: flex;
+  flex-direction: column; /* Stacks label on top of input */
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  margin-bottom: 8px;
+  color: #4a4a4a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input-group input {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+/* Highlights the box when the user clicks on it */
+.input-group input:focus {
+  outline: none;
+  border-color: #7b2cbf;
+  box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.1);
+}
+
+/* The Purple Button */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #7b2cbf; /* Matches your nice purple */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #6a1b9a; /* Slightly darker on hover */
+}

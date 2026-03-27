@@ -43,6 +43,7 @@ function loginUser() {
     return;
   }
 
+  // Save who is currently logged in, then teleport to the dashboard!
   localStorage.setItem("loggedInUser", userId);
   window.location.href = "index.html";
 }
