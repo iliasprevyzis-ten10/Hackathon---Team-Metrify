@@ -24,14 +24,16 @@ app.get('/', (req, res) => {
 
 // --- Register Endpoint ---
 // Note: added 'async' so we can wait for the password to hash
+// --- Register Endpoint ---
+// --- Register Endpoint ---
 app.post('/api/register', async (req, res) => {
     console.log("---- NEW SECURE REGISTRATION ATTEMPT ----");
-    const { email, password } = req.body;
+    
+    // 1. Grab the new name variables from the frontend
+    const { email, password, userFirstName, userSurname } = req.body;
 
     try {
-        // Step 1: Hash the password (10 is the security strength)
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const sql = `
             INSERT INTO Users (passwordHash, userFirstName, userSurname, email, isAdmin) 
@@ -39,15 +41,15 @@ app.post('/api/register', async (req, res) => {
         `;
         const statement = db.prepare(sql);
         
-        // Step 2: Save the hashedPassword, NOT the plain text one
-        const info = statement.run(hashedPassword, '', '', email, 0);
+        // 2. Pass the actual names instead of empty strings ''
+        const info = statement.run(hashedPassword, userFirstName, userSurname, email, 0);
 
-        console.log(`✅ Success: User saved with hash. ID: ${info.lastInsertRowid}`);
+        console.log(`✅ Success: User ${userFirstName} saved. ID: ${info.lastInsertRowid}`);
         res.status(201).json({ message: "User created successfully!" });
         
     } catch (err) {
         console.error("❌ BACKEND ERROR:", err);
-        if (err.code === 'SQLITE_CONSTRAINT') {
+        if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
             res.status(400).json({ message: "That email is already registered." });
         } else {
             res.status(500).json({ message: "Database error occurred." });

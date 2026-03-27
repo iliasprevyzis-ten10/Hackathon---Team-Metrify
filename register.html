@@ -14,8 +14,13 @@
     <form id="registrationForm" class="registration-form">
       
       <div class="input-group" style="margin-bottom: 15px;">
-        <label for="username" style="display: block; margin-bottom: 5px;">Username:</label>
-        <input type="text" id="username" placeholder="Enter your username" required style="width: 100%; padding: 8px; box-sizing: border-box;">
+        <label for="firstName" style="display: block; margin-bottom: 5px;">First Name:</label>
+        <input type="text" id="firstName" placeholder="John" required style="width: 100%; padding: 8px; box-sizing: border-box;">
+      </div>
+
+      <div class="input-group" style="margin-bottom: 15px;">
+        <label for="lastName" style="display: block; margin-bottom: 5px;">Last Name:</label>
+        <input type="text" id="lastName" placeholder="Doe" required style="width: 100%; padding: 8px; box-sizing: border-box;">
       </div>
 
       <div class="input-group" style="margin-bottom: 15px;">
@@ -33,7 +38,7 @@
         <input type="password" id="confirm-password" placeholder="Confirm your password" required style="width: 100%; padding: 8px; box-sizing: border-box;">
       </div>
 
-      <button type="submit" class="submit-btn" style="width: 100%; padding: 10px; background: #7b2cbf; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 16px;">Complete Registration</button>
+      <button type="submit" id="submitBtn" class="submit-btn" style="width: 100%; padding: 10px; background: #7b2cbf; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 16px;">Complete Registration</button>
       
       <p style="text-align: center; margin-top: 15px; font-size: 14px;">
         Already have an account? <a href="login.html" style="color: #7b2cbf; text-decoration: none; font-weight: bold;">Log in here</a>
@@ -43,41 +48,51 @@
   </div>
 
 <script>
-  document.getElementById('registrationForm').addEventListener('submit', function(event) {
-    // 1. Stop the form from doing its default instant-refresh
+  // Notice the "async" word added here so we can talk to the database
+  document.getElementById('registrationForm').addEventListener('submit', async function(event) {
     event.preventDefault(); 
 
-    // 2. Grab all the values the user typed in
-    const username = document.getElementById('username').value.trim();
+    // Grab values
+    const userFirstName = document.getElementById('firstName').value.trim();
+    const userSurname = document.getElementById('lastName').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
+    const submitBtn = document.getElementById('submitBtn');
 
-    // 3. Check if passwords match (Your awesome logic!)
+    // Validation
     if (password !== confirmPassword) {
       alert('Your passwords do not match. Please try again!');
-      return; // Stop running the code right here
+      return; 
     }
 
-    // 4. Check if the user already exists in localStorage
-    const existingUser = localStorage.getItem(username);
-    if (existingUser) {
-      alert("This username is already taken. Please choose another one.");
-      return;
+    // Change button text so user knows it's working
+    submitBtn.textContent = "Creating Account...";
+    submitBtn.disabled = true;
+
+    try {
+      // Send the data to your backend API
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, userFirstName, userSurname })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Account created successfully! Redirecting to login...');
+        window.location.href = "login.html";
+      } else {
+        alert("Error: " + data.message); // e.g., "That email is already registered."
+        submitBtn.textContent = "Complete Registration";
+        submitBtn.disabled = false;
+      }
+    } catch (error) {
+      alert("Could not connect to the server.");
+      submitBtn.textContent = "Complete Registration";
+      submitBtn.disabled = false;
     }
-
-    // 5. Create the user object and SAVE it to localStorage
-    const userObject = {
-      userId: username,
-      email: email,
-      password: password
-    };
-    
-    localStorage.setItem(username, JSON.stringify(userObject));
-
-    // 6. Tell the user it worked, then teleport them to the login page!
-    alert('Account created successfully! Redirecting to login...');
-    window.location.href = "login.html";
   });
 </script>
 
