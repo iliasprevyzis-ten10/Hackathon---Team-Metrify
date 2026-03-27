@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Ten10 Skills Matrix</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="brand">Ten10</p>
+      <h1>Login</h1>
+      <p class="subtitle">Sign in to track your skills and career progress.</p>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card" style="max-width: 500px; margin: 0 auto;">
+      <h2>Create Account / Login</h2>
+
+      <div class="field">
+        <label for="userId">Unique ID</label>
+        <input type="text" id="userId" placeholder="Enter your ID" />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" />
+      </div>
+
+      <div class="actions">
+        <button onclick="registerUser()">Register</button>
+        <button type="button" class="secondary-btn" onclick="loginUser()">Login</button>
+      </div>
+
+      <p id="message"></p>
+    </section>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>

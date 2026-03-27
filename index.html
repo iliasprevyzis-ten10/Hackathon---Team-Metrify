@@ -1,13 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script src="app.js" defer></script>
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ten10 Skills Matrix</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1> Hello Babe</h1>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="brand">Ten10</p>
+      <h1>Skills Matrix</h1>
+      <p class="subtitle">Track skills, find gaps, and build a plan to level up.</p>
+      <p id="welcomeUser"></p>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card">
+      <h2>Consultant View</h2>
+
+      <div class="field">
+        <label for="roleSelect">Select Role</label>
+        <select id="roleSelect">
+          <option value="">-- Choose a role --</option>
+          <option value="manualTester">Junior Manual Tester</option>
+          <option value="javaDev">Java Developer</option>
+          <option value="devops">DevOps</option>
+          <option value="dataAnalyst">Data Analyst</option>
+          <option value="dataEngineer">Data Engineer</option>
+          <option value="scrumMaster">SCRUM Master</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-header">
+        <h2>Skills Matrix</h2>
+        <span class="tag">Level 1 to 3</span>
+      </div>
+
+      <div id="skillsContainer"></div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div class="section-header">
+          <h2>Progress</h2>
+          <span class="tag">Saved</span>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+          </div>
+          <p id="progressText">0% Complete</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-header">
+          <h2>Missing Skills</h2>
+          <span class="tag warning-tag">Gap</span>
+        </div>
+
+        <ul id="missingSkills" class="list"></ul>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div class="section-header">
+          <h2>SMART Target</h2>
+          <span class="tag">Goal</span>
+        </div>
+
+        <p class="smart-text" id="smartTarget">
+          Your SMART target will appear here.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="section-header">
+          <h2>Learning Suggestions</h2>
+          <span class="tag">Resources</span>
+        </div>
+
+        <ul id="learningSuggestions" class="list">
+          <li><a href="#">SQL Course (YouTube)</a></li>
+          <li><a href="#">API Testing Basics</a></li>
+          <li><a href="#">Postman Beginner Guide</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-header">
+        <h2>Academy Lead View</h2>
+        <span class="tag">Admin</span>
+      </div>
+
+      <div class="admin-grid">
+        <div class="admin-box">
+          <h3>Registered Consultants</h3>
+          <ul class="list">
+            <li>Patrick</li>
+            <li>Jamie</li>
+            <li>Ilias</li>
+            <li>Pawel</li>
+          </ul>
+        </div>
+
+        <div class="admin-box">
+          <h3>Global Skills Heatmap</h3>
+          <ul class="list">
+            <li>SQL — missing for 2 users</li>
+            <li>API Testing — missing for 3 users</li>
+            <li>Automation — missing for 1 user</li>
+          </ul>
+        </div>
+
+        <div class="admin-box">
+          <h3>Target Review</h3>
+          <p>
+            API Testing target created for Ilias and marked as in progress.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="button" onclick="loadSkills()">Load Skills</button>
+      <button type="button" class="secondary-btn">Save Progress</button>
+    </div>
+  </main>
+
+  <script>
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    if (!loggedInUser) {
+      window.location.href = "login.html";
+    }
+  </script> 
+  <script src="app.js"></script>
 </body>
 </html>
