@@ -1,43 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login | Ten10 Skills Matrix</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Metrify</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="login.js" defer></script>
 </head>
-<body>
-  <header class="hero">
-    <div class="hero-inner">
-      <p class="brand">Ten10</p>
-      <h1>Login</h1>
-      <p class="subtitle">Sign in to track your skills and career progress.</p>
-    </div>
-  </header>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f5f7;">
 
-  <main class="page">
-    <section class="card" style="max-width: 500px; margin: 0 auto;">
-      <h2>Create Account / Login</h2>
+  <div style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+    <h2>Welcome to Metrify</h2>
+    
+    <p id="message" style="color: #7b2cbf; font-weight: bold; min-height: 20px;"></p>
+    
+    <div style="margin-bottom: 15px; text-align: left;">
+      <label>Username:</label><br>
+      <input type="text" id="userId" placeholder="Enter ID" style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+
+    <div style="margin-bottom: 20px; text-align: left;">
+      <label>Password:</label><br>
+      <input type="password" id="password" placeholder="Enter Password" style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
 
       <div class="field">
         <label for="email">Email</label>
         <input type="email" id="email" placeholder="Enter your email address" />
       </div>
+    <button type="button" onclick="loginUser()" style="width: 100%; padding: 10px; background: #7b2cbf; color: white; border: none; cursor: pointer; margin-bottom: 10px;">Log In</button>
+    
+    <button type="button" onclick="window.location.href='register.html'" style="width: 100%; padding: 10px; background: #4a4a4a; color: white; border: none; cursor: pointer;">Create Account</button>
+  </div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password" />
-      </div>
-
-      <div class="actions">
-        <button onclick="registerUser()">Register</button>
-        <button type="button" class="secondary-btn" onclick="loginUser()">Login</button>
-      </div>
-
-      <p id="message"></p>
-    </section>
-  </main>
-
-  <script src="login.js"></script>
 </body>
 </html>

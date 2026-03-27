@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Metrify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f5f7; margin: 0;">
+
+  <div class="registration-card" style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px;">
+    <h2 class="form-title" style="text-align: center; margin-bottom: 20px;">Create Account</h2>
+    
+    <form id="registrationForm" class="registration-form">
+      
+      <div class="input-group" style="margin-bottom: 15px;">
+        <label for="username" style="display: block; margin-bottom: 5px;">Username:</label>
+        <input type="text" id="username" placeholder="Enter your username" required style="width: 100%; padding: 8px; box-sizing: border-box;">
+      </div>
+
+      <div class="input-group" style="margin-bottom: 15px;">
+        <label for="email" style="display: block; margin-bottom: 5px;">Email Address:</label>
+        <input type="email" id="email" placeholder="name@example.com" required style="width: 100%; padding: 8px; box-sizing: border-box;">
+      </div>
+
+      <div class="input-group" style="margin-bottom: 15px;">
+        <label for="password" style="display: block; margin-bottom: 5px;">Password:</label>
+        <input type="password" id="password" placeholder="Create a password" required style="width: 100%; padding: 8px; box-sizing: border-box;">
+      </div>
+
+      <div class="input-group" style="margin-bottom: 25px;">
+        <label for="confirm-password" style="display: block; margin-bottom: 5px;">Validate Password:</label>
+        <input type="password" id="confirm-password" placeholder="Confirm your password" required style="width: 100%; padding: 8px; box-sizing: border-box;">
+      </div>
+
+      <button type="submit" class="submit-btn" style="width: 100%; padding: 10px; background: #7b2cbf; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 16px;">Complete Registration</button>
+      
+      <p style="text-align: center; margin-top: 15px; font-size: 14px;">
+        Already have an account? <a href="login.html" style="color: #7b2cbf; text-decoration: none; font-weight: bold;">Log in here</a>
+      </p>
+
+    </form>
+  </div>
+
+<script>
+  document.getElementById('registrationForm').addEventListener('submit', function(event) {
+    // 1. Stop the form from doing its default instant-refresh
+    event.preventDefault(); 
+
+    // 2. Grab all the values the user typed in
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+
+    // 3. Check if passwords match (Your awesome logic!)
+    if (password !== confirmPassword) {
+      alert('Your passwords do not match. Please try again!');
+      return; // Stop running the code right here
+    }
+
+    // 4. Check if the user already exists in localStorage
+    const existingUser = localStorage.getItem(username);
+    if (existingUser) {
+      alert("This username is already taken. Please choose another one.");
+      return;
+    }
+
+    // 5. Create the user object and SAVE it to localStorage
+    const userObject = {
+      userId: username,
+      email: email,
+      password: password
+    };
+    
+    localStorage.setItem(username, JSON.stringify(userObject));
+
+    // 6. Tell the user it worked, then teleport them to the login page!
+    alert('Account created successfully! Redirecting to login...');
+    window.location.href = "login.html";
+  });
+</script>
+
+</body>
+</html>

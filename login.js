@@ -45,10 +45,21 @@ async function loginUser(event) {
   const password = document.getElementById("password").value.trim();
   const message = document.getElementById("message");
 
+
   if (!email || !password) {
     message.textContent = "Please enter both an email and a password.";
     return;
   }
+
+  // Save who is currently logged in, then teleport to the dashboard!
+  localStorage.setItem("loggedInUser", userId);
+  window.location.href = "index.html";
+}
+
+        if (!user || user.passwordHash !== password) {
+            return res.status(401).json({ message: "Invalid ID or password." });
+        }
+
 
   try {
     const response = await fetch('http://localhost:3000/api/login', {
@@ -75,4 +86,14 @@ async function loginUser(event) {
     message.textContent = "Network error. Could not connect to the server.";
     message.style.color = "red";
   }
-}
+
+
+// 5. SERVER START
+app.listen(PORT, () => {
+    console.log(`
+    ✅ Backend is running!
+    🌍 View your app at: http://localhost:${PORT}
+    📂 Database connected to: ./db/matrifyDB
+    `);
+});
+
