@@ -7,13 +7,18 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["skills", "matrix", "tracking"],
+  "keywords": [
+    "skills",
+    "matrix",
+    "tracking"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.8.0",
     "cors": "^2.8.5",
-    "better-sqlite3": "^9.2.2"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
