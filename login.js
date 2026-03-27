@@ -1,4 +1,4 @@
-function registerUser() {
+async function registerUser() {
   const userId = document.getElementById("userId").value.trim();
   const password = document.getElementById("password").value.trim();
   const message = document.getElementById("message");
@@ -8,41 +8,62 @@ function registerUser() {
     return;
   }
 
-  const existingUser = localStorage.getItem(userId);
+  try {
+    // Pointed to port 3000
+    const response = await fetch('http://localhost:3000/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userId, password })
+    });
 
-  if (existingUser) {
-    message.textContent = "This user already exists.";
-    return;
+    if (response.ok) {
+      message.textContent = "Account created successfully. You can now log in.";
+    } else {
+      const errorData = await response.json();
+      message.textContent = errorData.message || "Registration failed.";
+    }
+  } catch (error) {
+    console.error("Registration error:", error);
+    message.textContent = "Network error. Is the server running on port 3000?";
   }
-
-  const user = {
-    userId,
-    password
-  };
-
-  localStorage.setItem(userId, JSON.stringify(user));
-  message.textContent = "Account created successfully. You can now log in.";
 }
 
-function loginUser() {
+async function loginUser() {
   const userId = document.getElementById("userId").value.trim();
   const password = document.getElementById("password").value.trim();
   const message = document.getElementById("message");
 
-  const savedUser = localStorage.getItem(userId);
-
-  if (!savedUser) {
-    message.textContent = "User not found.";
+  if (!userId || !password) {
+    message.textContent = "Please enter both ID and password.";
     return;
   }
 
-  const parsedUser = JSON.parse(savedUser);
+  try {
+    // Pointed to port 3000
+    const response = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userId, password })
+    });
 
-  if (parsedUser.password !== password) {
-    message.textContent = "Incorrect password.";
-    return;
+    if (response.ok) {
+      const data = await response.json();
+      
+      // Store the session info
+      localStorage.setItem("loggedInUser", userId); 
+      
+      // Redirect
+      window.location.href = "index.html";
+    } else {
+      const errorData = await response.json();
+      message.textContent = errorData.message || "Invalid credentials.";
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    message.textContent = "Network error. Could not connect to the server.";
   }
-
-  localStorage.setItem("loggedInUser", userId);
-  window.location.href = "index.html";
 }
