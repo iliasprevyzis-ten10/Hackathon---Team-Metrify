@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Page</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>  
+  <main class="admin-page">
+    <div class="admin-card">
+      <h1>Admin Page</h1>
+      <p class="admin-subtitle">
+        View all registered users and track the most and least common skills.
+      </p>
+
+      <div class="admin-top">
+        <!-- LEFT SIDE -->
+        <section class="users-section">
+          <h2>View All Users</h2>
+          <div id="usersList" class="users-list">
+            <!-- Users will be loaded here by admin.js -->
+          </div>
+        </section>
+
+        <!-- RIGHT SIDE -->
+        <section class="summary-section">
+          <div class="summary-box">
+            <h3>Most Common Skills</h3>
+            <ul id="mostCommonSkills"></ul>
+          </div>
+
+          <div class="summary-box">
+            <h3>Least Common Skills</h3>
+            <ul id="leastCommonSkills"></ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>
